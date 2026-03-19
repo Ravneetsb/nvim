@@ -1,0 +1,6 @@
+require('mini.surround').setup()
+require('mini.animate').setup()
+require('mini.indentscope').setup()
+-- require('mini.notify').setup()
+require('mini.completion').setup()
+require('mini.pairs').setup()
