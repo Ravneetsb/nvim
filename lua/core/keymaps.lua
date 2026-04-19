@@ -28,10 +28,19 @@ map('t', leader .. leader, '<Cmd>ToggleTerm<CR>', {
 local group_map = {
   m = { ":Mason<cr>", "LSP Mason" },
   d = { "<Nop>", "Diagnostics" },
-  f = { function() vim.lsp.buf.format() end, "Format" },
-  -- f = { function() conform.format() end, "Format" },
+  f = {
+    function()
+      conform.format({
+        async = false,
+        lsp_format = "fallback",
+        timeout_ms = 1000,
+      })
+    end,
+    "Format"
+  },
   c = { "<Nop>", "Code" },
   g = { "<Nop>", "Git" },
+  q = { "<Nop>", "Sessions" },
   ["<leader>"] = { ":ToggleTerm<cr>", "Terminal" },
   ["<Tab>"] = { "<Nop>", "Tabs" },
   l = { "<Nop>", "Latex" }
@@ -82,20 +91,14 @@ local git_map = {
 }
 gmap(github_leader, git_map)
 
-
--- Autoformat on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function() vim.lsp.buf.format() end,
-})
 -- load the session for the current directory
-vim.keymap.set("n", "<leader>qs", function() require("persistence").load() end)
+vim.keymap.set("n", "<leader>qs", function() require("persistence").load() end, { desc = "Load Session" })
 
 -- select a session to load
-vim.keymap.set("n", "<leader>qS", function() require("persistence").select() end)
+vim.keymap.set("n", "<leader>qS", function() require("persistence").select() end, { desc = "Select Session" })
 
 -- load the last session
-vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last = true }) end)
+vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last = true }) end, { desc = "Load Last Session" })
 
 -- stop Persistence => session won't be saved on exit
-vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end)
+vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end, { desc = "Stop Session Saving" })

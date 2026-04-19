@@ -67,7 +67,13 @@ require("lazy").setup({
   -- LSP (language server support)
   {
     "mason-org/mason-lspconfig.nvim",
-    opts = {},
+    opts = {
+      automatic_enable = {
+        exclude = {
+          "rust_analyzer",
+        },
+      },
+    },
     dependencies = {
       { "mason-org/mason.nvim", opts = {} },
       "neovim/nvim-lspconfig",
@@ -251,6 +257,17 @@ require("lazy").setup({
     "stevearc/conform.nvim",
     config = function()
       require("conform").setup({
+        notify_no_formatters = false,
+        format_on_save = function(bufnr)
+          if vim.bo[bufnr].buftype ~= "" then
+            return nil
+          end
+
+          return {
+            timeout_ms = 1000,
+            lsp_format = "fallback",
+          }
+        end,
         formatters_by_ft = {
           lua = { "stylua", "emmylua-codeformat" },
           -- Conform will run multiple formatters sequentially
@@ -283,18 +300,29 @@ require("lazy").setup({
     end,
   },
   {
+    "nvim-neotest/nvim-nio",
+    lazy = false,
+  },
+  {
     "mfussenegger/nvim-dap",             -- core debug adapter protocol
     dependencies = {
       "rcarriga/nvim-dap-ui",            -- nice floating UI for scopes, stacks, etc.
       "theHamsta/nvim-dap-virtual-text", -- inline variable display
       "nvim-neotest/nvim-nio",           -- async helpers for dap-ui
-      "mfussenegger/nvim-jdtls",         -- core debug adapter protocol
     },
     config = function()
       local dap = require("dap")
+      if not pcall(require, "nio") then
+        require("lazy").load({ plugins = { "nvim-nio" } })
+      end
       local dapui = require("dapui")
-
-      dapui.setup()
+      local ok, err = pcall(dapui.setup)
+      if not ok then
+        vim.schedule(function()
+          vim.notify("nvim-dap-ui setup failed: " .. err, vim.log.levels.ERROR)
+        end)
+        return
+      end
       require("nvim-dap-virtual-text").setup()
 
       -- open/close UI automatically
@@ -370,9 +398,8 @@ require("lazy").setup({
     ft = { "riscv_asm" },
   },
   {
-    'mrcjkb/rustaceanvim',
-    version = '^7', -- Recommended
-    lazy = false,   -- This plugin is already lazy
+    "mrcjkb/rustaceanvim",
+    version = "^7",
   },
   {
   "MeanderingProgrammer/render-markdown.nvim",
