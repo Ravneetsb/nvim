@@ -41,6 +41,7 @@ local group_map = {
   c = { "<Nop>", "Code" },
   g = { "<Nop>", "Git" },
   q = { "<Nop>", "Sessions" },
+  x = { "<Nop>", "Trouble" },
   ["<leader>"] = { ":ToggleTerm<cr>", "Terminal" },
   ["<Tab>"] = { "<Nop>", "Tabs" },
   l = { "<Nop>", "Latex" }
