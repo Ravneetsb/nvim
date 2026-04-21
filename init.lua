@@ -201,6 +201,9 @@ require("lazy").setup({
     config = function()
       require("nvim-tree").setup({
         sync_root_with_cwd = true,
+        renderer = {
+          group_empty = true,
+        },
         actions = {
           change_dir = {
             enable = true,
@@ -265,6 +268,10 @@ require("lazy").setup({
         },
       }
     end
+  },
+  {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "G" },
   },
   -- lazy.nvim
   {

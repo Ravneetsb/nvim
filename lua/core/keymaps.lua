@@ -87,6 +87,14 @@ gmap(tab_leader, tab_map)
 -- Github
 local github_leader = leader .. "g"
 local git_map = {
+  g = { ":Git<CR>", "Git Status" },
+  l = { ":Git log --oneline<CR>", "Git Log" },
+  d = { ":Git diff<CR>", "Git Diff" },
+  b = { ":Git blame<CR>", "Git Blame" },
+  a = { ":Git add %<CR>", "Git Add File" },
+  c = { ":Git commit<CR>", "Git Commit" },
+  p = { ":Git push<CR>", "Git Push" },
+  f = { ":Git fetch<CR>", "Git Fetch" },
   ["rh"] = { ":Gitsigns reset_hunk<CR>", "Reset hunk" },
   ["rb"] = { ":Gitsigns reset_buffer<CR>", "Reset buffer" }
 }
