@@ -446,10 +446,29 @@ require("lazy").setup({
     version = "^7",
   },
   {
-  "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown" },
-  opts = {},
-},
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    opts = {
+      inline_highlight = {
+        highlight = "RenderMarkdownInlineHighlight",
+      },
+    },
+    config = function(_, opts)
+      local function set_inline_highlight()
+        vim.api.nvim_set_hl(0, "RenderMarkdownInlineHighlight", {
+          bg = "#d7f3f0",
+          fg = "#0f3f3a",
+        })
+      end
+
+      set_inline_highlight()
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = set_inline_highlight,
+      })
+
+      require("render-markdown").setup(opts)
+    end,
+  },
 
 
 

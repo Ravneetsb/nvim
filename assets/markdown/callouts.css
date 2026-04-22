@@ -1,0 +1,162 @@
+:root {
+  color-scheme: light;
+  --callout-radius: 0.65rem;
+  --callout-border: #7f8ea3;
+  --callout-bg: #f7f9fc;
+  --callout-fg: #182230;
+}
+
+body {
+  color: #182230;
+  font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", "Hack Nerd Font", "Symbols Nerd Font", ui-sans-serif, system-ui, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  margin: 1rem auto;
+  max-width: 76ch;
+  padding: 0 0.75rem;
+}
+
+pre,
+code {
+  font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font Mono", "Hack Nerd Font Mono", ui-monospace, monospace;
+}
+
+mark {
+  background: #d7f3f0;
+  border-radius: 0.25rem;
+  color: #0f3f3a;
+  padding: 0.05rem 0.2rem;
+}
+
+table {
+  border: 1px solid #cbd5e1;
+  border-collapse: separate;
+  border-radius: 0.65rem;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+thead {
+  background: #eef2ff;
+}
+
+th,
+td {
+  border-bottom: 1px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+  padding: 0.65rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+td {
+  background: #ffffff;
+}
+
+tbody tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+th:last-child,
+td:last-child {
+  border-right: 0;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+blockquote {
+  background: #f8fafc;
+  border-left: 0.3rem solid #94a3b8;
+  color: #475569;
+  font-style: italic;
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.callout {
+  background: var(--callout-bg);
+  border: 1px solid color-mix(in srgb, var(--callout-border), white 62%);
+  border-left: 0.35rem solid var(--callout-border);
+  border-radius: var(--callout-radius);
+  color: var(--callout-fg);
+  margin: 1.25rem 0;
+  padding: 0.85rem 1rem;
+}
+
+.callout > p:first-child {
+  color: var(--callout-border);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-top: 0;
+}
+
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+.callout-note {
+  --callout-border: #2563eb;
+  --callout-bg: #eff6ff;
+}
+
+.callout-info {
+  --callout-border: #0891b2;
+  --callout-bg: #ecfeff;
+}
+
+.callout-tip {
+  --callout-border: #059669;
+  --callout-bg: #ecfdf5;
+}
+
+.callout-important {
+  --callout-border: #7c3aed;
+  --callout-bg: #f5f3ff;
+}
+
+.callout-warning {
+  --callout-border: #d97706;
+  --callout-bg: #fffbeb;
+}
+
+.callout-caution {
+  --callout-border: #dc2626;
+  --callout-bg: #fef2f2;
+}
+
+.callout-error,
+.callout-danger,
+.callout-failure,
+.callout-fail,
+.callout-missing,
+.callout-bug {
+  --callout-border: #dc2626;
+  --callout-bg: #fef2f2;
+}
+
+.callout-question {
+  --callout-border: #4f46e5;
+  --callout-bg: #eef2ff;
+}
+
+.callout-quote {
+  --callout-border: #64748b;
+  --callout-bg: #f8fafc;
+}
