@@ -1,5 +1,5 @@
 local dap = require("dap")
-local Terminal = require("toggleterm.terminal").Terminal
+local operations = require("core.operations")
 
 local function project_root()
   local path = vim.api.nvim_buf_get_name(0)
@@ -17,15 +17,7 @@ local function run_cargo(cmd)
     return
   end
 
-  local term = Terminal:new({
-    cmd = cmd,
-    dir = root,
-    direction = "float",
-    close_on_exit = false,
-    hidden = true,
-  })
-
-  term:toggle()
+  operations.run_in_float(cmd, root)
 end
 
 local extension_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/"
@@ -63,3 +55,4 @@ end, { buffer = true, desc = "Build" })
 vim.keymap.set("n", "<leader>ot", function()
   run_cargo("cargo test")
 end, { buffer = true, desc = "Test" })
+operations.add_make_mapping()

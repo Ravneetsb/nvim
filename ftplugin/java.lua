@@ -1,4 +1,4 @@
-local Terminal = require("toggleterm.terminal").Terminal
+local operations = require("core.operations")
 
 local function project_root()
   local path = vim.api.nvim_buf_get_name(0)
@@ -16,15 +16,7 @@ local function run_maven(cmd)
     return
   end
 
-  local term = Terminal:new({
-    cmd = cmd,
-    dir = root,
-    direction = "float",
-    close_on_exit = false,
-    hidden = true,
-  })
-
-  term:toggle()
+  operations.run_in_float(cmd, root)
 end
 
 vim.keymap.set("n", "<leader>o", "<Nop>", { buffer = true, desc = "Operations" })
@@ -34,3 +26,4 @@ end, { buffer = true, desc = "Compile" })
 vim.keymap.set("n", "<leader>ob", function()
   run_maven("mvn clean package")
 end, { buffer = true, desc = "Build" })
+operations.add_make_mapping()
