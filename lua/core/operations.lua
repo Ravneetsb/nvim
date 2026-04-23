@@ -37,7 +37,9 @@ function M.add_make_mapping()
     return
   end
 
-  vim.keymap.set("n", "<leader>om", function()
+  vim.keymap.set("n", "<leader>om", "<Nop>", { buffer = true, desc = "Make" })
+
+  vim.keymap.set("n", "<leader>omm", function()
     local root = M.make_root()
     if not root then
       vim.notify("No Makefile found for current buffer", vim.log.levels.WARN)
@@ -46,6 +48,16 @@ function M.add_make_mapping()
 
     M.run_in_float("make", root)
   end, { buffer = true, desc = "Make" })
+
+  vim.keymap.set("n", "<leader>omc", function()
+    local root = M.make_root()
+    if not root then
+      vim.notify("No Makefile found for current buffer", vim.log.levels.WARN)
+      return
+    end
+
+    M.run_in_float("make clean", root)
+  end, { buffer = true, desc = "Make Clean" })
 end
 
 return M
