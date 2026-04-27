@@ -75,10 +75,11 @@ gmap(code_leader, code_map)
 
 
 -- Tab
-local tab_leader = leader .. "<Tab>"
+-- local tab_leader = leader .. "<Tab>"
+local tab_leader = "<Tab>"
 local tab_map = {
-  ["<Tab>"] = { ":tabnew<CR>", "New Tab" },
-  n = { ":tabnext<CR>", "Next Tab" },
+  ["<Tab>"] = { ":tabnext<CR>", "Next Tab" },
+  n = { ":tabnew<CR>", "New Tab" },
   p = { ":tabprevious<CR>", "Previous Tab" },
   f = { ":tabnew | enew<CR>", "New File" }
 }
@@ -87,12 +88,13 @@ gmap(tab_leader, tab_map)
 -- Github
 local github_leader = leader .. "g"
 local git_map = {
-  g = { ":Git<CR>", "Git Status" },
+  s = { ":Git<CR>", "Git Status" },
   l = { ":Git log --oneline<CR>", "Git Log" },
   d = { ":Git diff<CR>", "Git Diff" },
   b = { ":Git blame<CR>", "Git Blame" },
   a = { ":Git add %<CR>", "Git Add File" },
   c = { ":Git commit<CR>", "Git Commit" },
+  m = { ":Git commit --amend<CR>", "Git Amend Commit" },
   p = { ":Git push<CR>", "Git Push" },
   f = { ":Git fetch<CR>", "Git Fetch" },
   ["rh"] = { ":Gitsigns reset_hunk<CR>", "Reset hunk" },
@@ -107,7 +109,8 @@ vim.keymap.set("n", "<leader>qs", function() require("persistence").load() end, 
 vim.keymap.set("n", "<leader>qS", function() require("persistence").select() end, { desc = "Select Session" })
 
 -- load the last session
-vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last = true }) end, { desc = "Load Last Session" })
+vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last = true }) end,
+  { desc = "Load Last Session" })
 
 -- stop Persistence => session won't be saved on exit
 vim.keymap.set("n", "<leader>qd", function() require("persistence").stop() end, { desc = "Stop Session Saving" })

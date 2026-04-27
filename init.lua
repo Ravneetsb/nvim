@@ -16,6 +16,16 @@ vim.opt.conceallevel = 2     -- 0 = disabled, 1/2/3 increases hiding behavior
 vim.opt.concealcursor = "nc" -- conceal in Normal and Command modes (not Insert)
 vim.opt.scrolloff = 999
 
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  group = vim.api.nvim_create_augroup("ClearSearchHighlightOnSearchEnd", { clear = true }),
+  pattern = { "/", "?" },
+  callback = function()
+    vim.schedule(function()
+      vim.cmd("nohlsearch")
+    end)
+  end,
+})
+
 -- ==============================
 -- Bootstrap lazy.nvim (plugin manager)
 
