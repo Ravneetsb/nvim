@@ -34,7 +34,8 @@ local function pandoc_html_command(input, output)
   end
 
   local config = vim.fn.stdpath("config")
-  local filter = config .. "/assets/markdown/callouts.lua"
+  local callout_filter = config .. "/assets/markdown/callouts.lua"
+  local d2_filter = config .. "/assets/markdown/d2.lua"
   local css = config .. "/assets/markdown/callouts.css"
 
   return table.concat({
@@ -44,7 +45,8 @@ local function pandoc_html_command(input, output)
     "--from markdown+mark",
     "--to html5",
     "--mathml",
-    "--lua-filter " .. vim.fn.shellescape(filter),
+    "--lua-filter " .. vim.fn.shellescape(callout_filter),
+    "--lua-filter " .. vim.fn.shellescape(d2_filter),
     "--css " .. vim.fn.shellescape(css),
     "--output " .. vim.fn.shellescape(output),
   }, " ")

@@ -90,6 +90,13 @@ blockquote > :last-child {
   margin-bottom: 0;
 }
 
+.d2-diagram {
+  display: block;
+  height: auto;
+  margin: 1.5rem auto;
+  max-width: 100%;
+}
+
 .callout {
   background: var(--callout-bg);
   border: 1px solid color-mix(in srgb, var(--callout-border), white 62%);
