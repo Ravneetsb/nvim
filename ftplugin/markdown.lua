@@ -10,12 +10,28 @@ local function current_file()
   return path
 end
 
+local export_root = vim.fn.expand("~/Documents/exports")
+
+local function export_dir(kind)
+  return export_root .. "/" .. kind
+end
+
+local function ensure_export_dir(kind)
+  local dir = export_dir(kind)
+  if vim.fn.mkdir(dir, "p") == 1 then
+    return dir
+  end
+
+  vim.notify("Could not create export directory: " .. dir, vim.log.levels.ERROR)
+  return nil
+end
+
 local function html_output_file(path)
-  return vim.fn.fnamemodify(path, ":r") .. ".html"
+  return export_dir("html") .. "/" .. vim.fn.fnamemodify(path, ":t:r") .. ".html"
 end
 
 local function pdf_output_file(path)
-  return vim.fn.fnamemodify(path, ":r") .. ".pdf"
+  return export_dir("pdf") .. "/" .. vim.fn.fnamemodify(path, ":t:r") .. ".pdf"
 end
 
 local function has_executable(name)
@@ -37,8 +53,10 @@ local function pandoc_html_command(input, output)
   local callout_filter = config .. "/assets/markdown/callouts.lua"
   local d2_filter = config .. "/assets/markdown/d2.lua"
   local css = config .. "/assets/markdown/callouts.css"
+  local output_dir = vim.fn.fnamemodify(output, ":h")
 
   return table.concat({
+    "MARKDOWN_EXPORT_DIR=" .. vim.fn.shellescape(output_dir),
     "pandoc",
     vim.fn.shellescape(input),
     "--standalone",
@@ -68,6 +86,10 @@ local function export_html()
     return
   end
 
+  if not ensure_export_dir("html") then
+    return
+  end
+
   local output = html_output_file(input)
   local cmd = pandoc_html_command(input, output)
   if not cmd then
@@ -85,6 +107,10 @@ local function export_pdf()
   end
 
   if not has_executable("weasyprint") then
+    return
+  end
+
+  if not ensure_export_dir("html") or not ensure_export_dir("pdf") then
     return
   end
 

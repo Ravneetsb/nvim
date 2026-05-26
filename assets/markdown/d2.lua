@@ -51,6 +51,20 @@ local function input_file()
   return input_files[1]
 end
 
+local function output_directory()
+  local export_dir = os.getenv("MARKDOWN_EXPORT_DIR")
+  if export_dir and export_dir ~= "" then
+    return export_dir
+  end
+
+  local output_file = PANDOC_STATE and PANDOC_STATE.output_file
+  if output_file and output_file ~= "" then
+    return pandoc.path.directory(output_file)
+  end
+
+  return pandoc.path.directory(input_file())
+end
+
 local function render_d2(source, output)
   pandoc.pipe("d2", { "-", output }, source)
 end
@@ -61,7 +75,7 @@ function CodeBlock(block)
   end
 
   local source = input_file()
-  local directory = pandoc.path.directory(source)
+  local directory = output_directory()
   local assets_directory = pandoc.path.join({ directory, "assets" })
   local filename = sanitize_filename(pandoc.path.filename(source)) .. "-d2-" .. fnv1a(block.text) .. ".svg"
   local output = pandoc.path.join({ assets_directory, filename })
