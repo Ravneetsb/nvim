@@ -43,20 +43,24 @@ local function has_executable(name)
   return false
 end
 
-local function pandoc_html_command(input, output)
-  if vim.fn.executable("pandoc") ~= 1 then
-    vim.notify("pandoc is not installed or not on PATH", vim.log.levels.WARN)
+local function pandoc_html_command(input, output, options)
+  if not has_executable("pandoc") or not has_executable("d2") then
     return nil
   end
+
+  options = options or {}
 
   local config = vim.fn.stdpath("config")
   local callout_filter = config .. "/assets/markdown/callouts.lua"
   local d2_filter = config .. "/assets/markdown/d2.lua"
   local css = config .. "/assets/markdown/callouts.css"
   local output_dir = vim.fn.fnamemodify(output, ":h")
+  local d2_bin = vim.fn.exepath("d2")
 
   return table.concat({
     "MARKDOWN_EXPORT_DIR=" .. vim.fn.shellescape(output_dir),
+    "D2_BIN=" .. vim.fn.shellescape(d2_bin),
+    "MARKDOWN_D2_FORMAT=" .. vim.fn.shellescape(options.d2_format or "svg"),
     "pandoc",
     vim.fn.shellescape(input),
     "--standalone",
@@ -116,7 +120,7 @@ local function export_pdf()
 
   local html_output = html_output_file(input)
   local pdf_output = pdf_output_file(input)
-  local html_cmd = pandoc_html_command(input, html_output)
+  local html_cmd = pandoc_html_command(input, html_output, { d2_format = "png" })
   if not html_cmd then
     return
   end

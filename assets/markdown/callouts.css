@@ -97,6 +97,24 @@ blockquote > :last-child {
   max-width: 100%;
 }
 
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4;
+  }
+
+  body {
+    margin: 0 auto;
+  }
+
+  .d2-diagram {
+    max-height: 260mm;
+    max-width: 100%;
+    object-fit: contain;
+    width: auto;
+  }
+}
+
 .callout {
   background: var(--callout-bg);
   border: 1px solid color-mix(in srgb, var(--callout-border), white 62%);

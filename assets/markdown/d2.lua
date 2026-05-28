@@ -66,7 +66,29 @@ local function output_directory()
 end
 
 local function render_d2(source, output)
-  pandoc.pipe("d2", { "-", output }, source)
+  pandoc.pipe(os.getenv("D2_BIN") or "d2", { "-", output }, source)
+end
+
+local function output_format()
+  local format = os.getenv("MARKDOWN_D2_FORMAT")
+  if format == "png" then
+    return "png"
+  end
+
+  return "svg"
+end
+
+local function image_attributes(block)
+  local attributes = {}
+
+  for _, name in ipairs({ "width", "height" }) do
+    local value = block.attributes[name]
+    if value and value ~= "" then
+      attributes[name] = value
+    end
+  end
+
+  return pandoc.Attr("", { "d2-diagram" }, attributes)
 end
 
 function CodeBlock(block)
@@ -77,7 +99,8 @@ function CodeBlock(block)
   local source = input_file()
   local directory = output_directory()
   local assets_directory = pandoc.path.join({ directory, "assets" })
-  local filename = sanitize_filename(pandoc.path.filename(source)) .. "-d2-" .. fnv1a(block.text) .. ".svg"
+  local format = output_format()
+  local filename = sanitize_filename(pandoc.path.filename(source)) .. "-d2-" .. fnv1a(block.text) .. "." .. format
   local output = pandoc.path.join({ assets_directory, filename })
   local target = pandoc.path.join({ "assets", filename })
 
@@ -85,6 +108,6 @@ function CodeBlock(block)
   render_d2(block.text, output)
 
   return pandoc.Para({
-    pandoc.Image({ pandoc.Str("D2 diagram") }, target, "", pandoc.Attr("", { "d2-diagram" })),
+    pandoc.Image({ pandoc.Str("D2 diagram") }, target, "", image_attributes(block)),
   })
 end
