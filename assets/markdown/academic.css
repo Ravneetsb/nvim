@@ -1,0 +1,319 @@
+:root {
+  color-scheme: light;
+  --body-fg: #111827;
+  --muted-fg: #4b5563;
+  --rule: #d1d5db;
+  --soft-rule: #e5e7eb;
+  --code-bg: #f8fafc;
+  --callout-border: #6b7280;
+  --callout-bg: #f9fafb;
+  --callout-fg: #111827;
+}
+
+html {
+  background: #ffffff;
+}
+
+body {
+  color: var(--body-fg);
+  font-family: "Libertinus Serif", "Linux Libertine O", "TeX Gyre Termes", Georgia, "Times New Roman", serif;
+  font-size: 11pt;
+  line-height: 1.55;
+  margin: 1.5rem auto;
+  max-width: 72ch;
+  padding: 0 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #0f172a;
+  font-family: "Libertinus Serif", "Linux Libertine O", "TeX Gyre Termes", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  border-bottom: 1px solid var(--rule);
+  font-size: 20pt;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.45rem;
+  text-align: center;
+}
+
+header#title-block-header {
+  border-bottom: 1px solid var(--rule);
+  margin: 0 0 1.75rem;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+header#title-block-header h1.title {
+  border-bottom: 0;
+  font-size: 20pt;
+  margin: 0 0 0.55rem;
+  padding-bottom: 0;
+}
+
+header#title-block-header p {
+  margin: 0;
+}
+
+header#title-block-header .author {
+  color: #1f2937;
+  font-size: 12.5pt;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.03em;
+}
+
+header#title-block-header .date {
+  color: var(--muted-fg);
+  font-size: 10pt;
+  margin-top: 0.2rem;
+}
+
+header#title-block-header + h1,
+header#title-block-header + h2 {
+  margin-top: 0;
+}
+
+h2 {
+  border-bottom: 1px solid var(--soft-rule);
+  font-size: 15pt;
+  margin: 1.75rem 0 0.75rem;
+  padding-bottom: 0.2rem;
+}
+
+h3 {
+  font-size: 12.5pt;
+  margin: 1.35rem 0 0.55rem;
+}
+
+h4,
+h5,
+h6 {
+  font-size: 11pt;
+  margin: 1rem 0 0.4rem;
+}
+
+p,
+ol,
+ul,
+dl,
+blockquote,
+pre,
+table {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+}
+
+a {
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 1.5rem 0;
+}
+
+pre,
+code {
+  font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font Mono", "Hack Nerd Font Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.92em;
+}
+
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--soft-rule);
+  border-radius: 0.2rem;
+  padding: 0.05rem 0.2rem;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  border-radius: 0.25rem;
+  line-height: 1.45;
+  overflow-x: auto;
+  padding: 0.75rem 0.9rem;
+}
+
+pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+mark {
+  background: #fef3c7;
+  border-radius: 0.15rem;
+  color: inherit;
+  padding: 0.02rem 0.12rem;
+}
+
+blockquote {
+  border-left: 3px solid #9ca3af;
+  color: var(--muted-fg);
+  font-style: italic;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 10pt;
+  width: 100%;
+}
+
+caption {
+  color: var(--muted-fg);
+  font-size: 10pt;
+  margin-bottom: 0.35rem;
+}
+
+th,
+td {
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f3f4f6;
+  font-weight: 700;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fbfbfb;
+}
+
+img {
+  max-width: 100%;
+}
+
+.d2-diagram {
+  display: block;
+  height: auto;
+  margin: 1.2rem auto;
+  max-width: 100%;
+}
+
+.callout {
+  background: var(--callout-bg);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--callout-border);
+  border-radius: 0.2rem;
+  color: var(--callout-fg);
+  margin: 1rem 0;
+  padding: 0.65rem 0.8rem;
+}
+
+.callout > p:first-child {
+  color: var(--callout-border);
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+.callout-note {
+  --callout-border: #2563eb;
+  --callout-bg: #eff6ff;
+}
+
+.callout-info {
+  --callout-border: #0891b2;
+  --callout-bg: #ecfeff;
+}
+
+.callout-tip {
+  --callout-border: #047857;
+  --callout-bg: #ecfdf5;
+}
+
+.callout-important,
+.callout-question {
+  --callout-border: #4f46e5;
+  --callout-bg: #eef2ff;
+}
+
+.callout-warning {
+  --callout-border: #b45309;
+  --callout-bg: #fffbeb;
+}
+
+.callout-caution,
+.callout-error,
+.callout-danger,
+.callout-failure,
+.callout-fail,
+.callout-missing,
+.callout-bug {
+  --callout-border: #b91c1c;
+  --callout-bg: #fef2f2;
+}
+
+.callout-quote {
+  --callout-border: #64748b;
+  --callout-bg: #f8fafc;
+}
+
+@media print {
+  @page {
+    margin: 20mm;
+    size: A4;
+  }
+
+  body {
+    margin: 0 auto;
+    max-width: none;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  pre,
+  blockquote,
+  table,
+  .callout,
+  .d2-diagram {
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .d2-diagram {
+    max-height: 245mm;
+    max-width: 100%;
+    object-fit: contain;
+    width: auto;
+  }
+}
