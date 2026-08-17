@@ -259,3 +259,4 @@ vim.keymap.set("n", "<leader>oP", export_academic_pdf, { buffer = true, desc = "
 vim.keymap.set("n", "<leader>oD", open_pdf, { buffer = true, desc = "Open PDF" })
 vim.keymap.set("n", "<leader>oR", open_academic_pdf, { buffer = true, desc = "Open Academic PDF" })
 vim.keymap.set("n", "<leader>op", toggle_render_markdown, { buffer = true, desc = "Toggle Render" })
+vim.keymap.set("n", "<leader>ot", "<Cmd>AerialToggle right<CR>", { buffer = true, desc = "Toggle Heading Outline" })

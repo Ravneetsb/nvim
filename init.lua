@@ -346,9 +346,12 @@ require("lazy").setup({
         callback = 1,
         executable = "latexmk",
         options = {
-          "-pdf",
+          "-xelatex",
           "-interaction=nonstopmode",
           "-synctex=1",
+          "-outdir=build",
+          "-out2dir=.",
+          "-e '@out2_exts = (\"pdf\")'",
         },
       }
     end,
@@ -478,6 +481,23 @@ require("lazy").setup({
 
       require("render-markdown").setup(opts)
     end,
+  },
+  {
+    "stevearc/aerial.nvim",
+    branch = "nvim-0.11",
+    ft = { "markdown" },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+    opts = {
+      backends = { "treesitter", "markdown" },
+      attach_mode = "window",
+      layout = {
+        default_direction = "right",
+        placement = "edge",
+      },
+    },
   },
 
 
