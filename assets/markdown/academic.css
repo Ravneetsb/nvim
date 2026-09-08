@@ -208,7 +208,7 @@ img {
   max-width: 100%;
 }
 
-.d2-diagram {
+.diagram {
   display: block;
   height: auto;
   margin: 1.2rem auto;
@@ -302,7 +302,7 @@ img {
   blockquote,
   table,
   .callout,
-  .d2-diagram {
+  .diagram {
     page-break-inside: avoid;
   }
 
@@ -310,7 +310,7 @@ img {
     color: inherit;
   }
 
-  .d2-diagram {
+  .diagram {
     max-height: 245mm;
     max-width: 100%;
     object-fit: contain;

@@ -74,7 +74,14 @@ local function css_for_template(config, template)
 end
 
 local function pandoc_html_command(input, output, options)
-  if not has_executable("pandoc") or not has_executable("d2") then
+  local renderers_available = true
+  for _, executable in ipairs({ "pandoc", "d2", "mmdr", "dot" }) do
+    if not has_executable(executable) then
+      renderers_available = false
+    end
+  end
+
+  if not renderers_available then
     return nil
   end
 
@@ -83,24 +90,32 @@ local function pandoc_html_command(input, output, options)
   local config = vim.fn.stdpath("config")
   local pagetitle_filter = config .. "/assets/markdown/pagetitle.lua"
   local callout_filter = config .. "/assets/markdown/callouts.lua"
-  local d2_filter = config .. "/assets/markdown/d2.lua"
+  local diagrams_filter = config .. "/assets/markdown/diagrams.lua"
   local css = css_for_template(config, options.template)
+  local input_dir = vim.fn.fnamemodify(input, ":h")
   local output_dir = vim.fn.fnamemodify(output, ":h")
+  local resource_path = table.concat({ input_dir, output_dir }, ":")
   local d2_bin = vim.fn.exepath("d2")
+  local mmdr_bin = vim.fn.exepath("mmdr")
+  local graphviz_bin = vim.fn.exepath("dot")
 
   return table.concat({
     "MARKDOWN_EXPORT_DIR=" .. vim.fn.shellescape(output_dir),
     "D2_BIN=" .. vim.fn.shellescape(d2_bin),
-    "MARKDOWN_D2_FORMAT=" .. vim.fn.shellescape(options.d2_format or "svg"),
+    "MMDR_BIN=" .. vim.fn.shellescape(mmdr_bin),
+    "GRAPHVIZ_BIN=" .. vim.fn.shellescape(graphviz_bin),
+    "MARKDOWN_DIAGRAM_FORMAT=" .. vim.fn.shellescape(options.diagram_format or "svg"),
     "pandoc",
     vim.fn.shellescape(input),
     "--standalone",
     "--from markdown+mark",
     "--to html5",
     "--mathml",
+    "--embed-resources",
+    "--resource-path " .. vim.fn.shellescape(resource_path),
     "--lua-filter " .. vim.fn.shellescape(pagetitle_filter),
     "--lua-filter " .. vim.fn.shellescape(callout_filter),
-    "--lua-filter " .. vim.fn.shellescape(d2_filter),
+    "--lua-filter " .. vim.fn.shellescape(diagrams_filter),
     "--css " .. vim.fn.shellescape(css),
     "--output " .. vim.fn.shellescape(output),
   }, " ")
@@ -169,14 +184,14 @@ local function export_pdf(options)
 
   local html_output = html_output_file(input, options.template)
   local pdf_output = pdf_output_file(input, options.template)
-  local html_options = vim.tbl_extend("force", options, { d2_format = "png" })
-  local html_cmd = pandoc_html_command(input, html_output, html_options)
+  local html_cmd = pandoc_html_command(input, html_output, options)
   if not html_cmd then
     return
   end
 
   local pdf_cmd = table.concat({
     "weasyprint",
+    "--presentational-hints",
     vim.fn.shellescape(html_output),
     vim.fn.shellescape(pdf_output),
   }, " ")

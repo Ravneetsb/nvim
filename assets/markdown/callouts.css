@@ -90,7 +90,7 @@ blockquote > :last-child {
   margin-bottom: 0;
 }
 
-.d2-diagram {
+.diagram {
   display: block;
   height: auto;
   margin: 1.5rem auto;
@@ -107,7 +107,7 @@ blockquote > :last-child {
     margin: 0 auto;
   }
 
-  .d2-diagram {
+  .diagram {
     max-height: 260mm;
     max-width: 100%;
     object-fit: contain;
