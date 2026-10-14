@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+
+import re
+import subprocess
+import sys
+import unicodedata
+from functools import lru_cache
+
+
+SUPERSCRIPT = dict(zip(
+    "0123456789+-=()abcdefghijklmnoprstuvwxyz",
+    "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ",
+))
+SUBSCRIPT = dict(zip("0123456789+-=()aehijklmnoprstuvx", "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ"))
+SUPERSCRIPT.update(zip("ABCDEFGHIJKLMNOPQRTUVWq", "ᴬᴮꟲᴰᴱꟳᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾꟴᴿᵀᵁⱽᵂ𐞥"))
+SUPERSCRIPT.update(zip("βγδθφχ", "ᵝᵞᵟᶿᵠᵡ"))
+SUBSCRIPT.update(zip("βγρφχ", "ᵦᵧᵨᵩᵪ"))
+
+
+@lru_cache(maxsize=256)
+def render(source):
+    result = subprocess.run(
+        ["utftex"], input=source, text=True, capture_output=True, check=True,
+    )
+    return result.stdout.rstrip("\n")
+
+
+def argument(source, start):
+    while start < len(source) and source[start].isspace():
+        start += 1
+    if start == len(source):
+        return None
+    if source[start] == "{":
+        depth = 1
+        end = start + 1
+        while end < len(source):
+            if source[end] == "\\":
+                end += 2
+                continue
+            if source[end] == "{":
+                depth += 1
+            elif source[end] == "}":
+                depth -= 1
+                if depth == 0:
+                    return source[start + 1:end], end + 1
+            end += 1
+        return None
+    if source[start] == "\\":
+        command = re.match(r"\\(?:[a-zA-Z]+|.)", source[start:])
+        if command:
+            end = start + len(command[0])
+            return command[0], end
+    return source[start], start + 1
+
+
+def compact(source):
+    literals = {}
+
+    def literal(value):
+        result = []
+        for char in value:
+            token = chr(0xF0000 + len(literals))
+            literals[token] = char
+            result.append(token)
+        return "".join(result)
+
+    output = []
+    index = 0
+    while index < len(source):
+        char = source[index]
+        if char == "\\":
+            command = re.match(r"\\(?:[a-zA-Z]+|.)", source[index:])
+            if command:
+                output.append(command[0])
+                index += len(command[0])
+                continue
+        if char in "^_":
+            parsed = argument(source, index + 1)
+            if parsed:
+                body, end = parsed
+                try:
+                    text = render(body).strip()
+                except subprocess.CalledProcessError:
+                    output.append(source[index:end])
+                    index = end
+                    continue
+                mapping = SUPERSCRIPT if char == "^" else SUBSCRIPT
+                normalized = unicodedata.normalize("NFKC", text)
+                if normalized and all(letter in mapping for letter in normalized):
+                    output.append("".join(mapping[letter] for letter in normalized))
+                else:
+                    text = " ".join((body if "\n" in text else text).split())
+                    output.append(literal(char + "{" + text + "}"))
+                index = end
+                continue
+        output.append(char)
+        index += 1
+
+    result = render("".join(output))
+    return "".join(literals.get(char, char) for char in result)
+
+
+if __name__ == "__main__":
+    try:
+        print(compact(sys.stdin.read()))
+    except (OSError, subprocess.CalledProcessError) as error:
+        print(f"Could not render Markdown math: {error}", file=sys.stderr)
+        sys.exit(1)

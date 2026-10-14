@@ -29,6 +29,7 @@
   "render-markdown.nvim": { "branch": "main", "commit": "fcea0776a3019f49360b7aaec3318630633c522d" },
   "riscv-asm-vim": { "branch": "master", "commit": "af37cced21452c6edbe1f42811103be34ee19de2" },
   "rustaceanvim": { "branch": "master", "commit": "3ace64feb1ce3cf3c63e6297e1378a82fe548618" },
+  "snacks.nvim": { "branch": "main", "commit": "882c996cf28183f4d63640de0b4c02ec886d01f2" },
   "spring-boot.nvim": { "branch": "main", "commit": "218c0c26c14d99feca778e4d13f5ec3e8b1b60f0" },
   "telescope.nvim": { "branch": "0.1.x", "commit": "d90956833d7c27e73c621a61f20b29fdb7122709" },
   "toggleterm.nvim": { "branch": "main", "commit": "50ea089fc548917cc3cc16b46a8211833b9e3c7c" },

@@ -50,6 +50,80 @@ require("lazy").setup({
   -- Helper library
   "nvim-lua/plenary.nvim",
   {
+    "folke/snacks.nvim",
+    lazy = false,
+    priority = 1000,
+    init = function()
+      local config_bin = vim.fs.joinpath(vim.fn.stdpath("config"), "bin")
+      vim.env.PATH = config_bin .. ":" .. (vim.env.PATH or "")
+      vim.treesitter.query.set("markdown", "images", "")
+    end,
+    opts = {
+      image = {
+        enabled = true,
+        math = {
+          enabled = false,
+        },
+        doc = {
+          enabled = true,
+          inline = true,
+          float = true,
+          max_width = 90,
+          max_height = 45,
+          conceal = false,
+          on_update_pre = function(placement)
+            local opts = placement.opts
+            local range = opts.inline and opts.range
+            if not range then
+              return
+            end
+
+            local ok, lines = pcall(
+              vim.api.nvim_buf_get_text,
+              placement.buf,
+              range[1] - 1,
+              range[2],
+              range[3] - 1,
+              range[4],
+              {}
+            )
+            if not ok then
+              return
+            end
+
+            local tag = table.concat(lines, "\n"):lower()
+            if not tag:match("^%s*<img[%s>]") then
+              return
+            end
+
+            local doc = Snacks.image.config.doc
+            opts.max_width = doc.max_width
+            opts.max_height = doc.max_height
+
+            local percent = tonumber(tag:match([=[%swidth%s*=%s*["'](%d+)%%["']]=]))
+            if not percent or percent < 1 or percent > 100 then
+              return
+            end
+
+            local available_width = vim.o.columns
+            for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == placement.buf then
+                available_width = math.min(available_width, vim.api.nvim_win_get_width(win))
+              end
+            end
+
+            local requested_width = math.max(1, math.floor(available_width * percent / 100))
+            opts.max_width = math.min(doc.max_width, requested_width)
+            opts.max_height = 20
+          end,
+        },
+        convert = {
+          notify = true,
+        },
+      },
+    },
+  },
+  {
     'akinsho/toggleterm.nvim',
     version = "*",
     config = true
@@ -304,6 +378,11 @@ require("lazy").setup({
     dependencies = { "rafamadriz/friendly-snippets" },
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load()
+      local luasnip = require("luasnip")
+      luasnip.add_snippets("markdown", {
+        luasnip.parser.parse_snippet({ trig = "tt", wordTrig = true }, [[\text{$1}$0]]),
+        luasnip.parser.parse_snippet({ trig = "ff", wordTrig = true }, [[\frac{$1}{$2}$0]]),
+      }, { key = "markdown_math" })
     end,
 
   },
@@ -462,8 +541,18 @@ require("lazy").setup({
     "MeanderingProgrammer/render-markdown.nvim",
     ft = { "markdown" },
     opts = {
+      latex = {
+        enabled = true,
+        converter = vim.fn.stdpath("config") .. "/bin/markdown-math",
+      },
       inline_highlight = {
         highlight = "RenderMarkdownInlineHighlight",
+      },
+      win_options = {
+        conceallevel = {
+          default = 0,
+          rendered = 3,
+        },
       },
     },
     config = function(_, opts)

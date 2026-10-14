@@ -91,6 +91,7 @@ local function pandoc_html_command(input, output, options)
   local pagetitle_filter = config .. "/assets/markdown/pagetitle.lua"
   local callout_filter = config .. "/assets/markdown/callouts.lua"
   local diagrams_filter = config .. "/assets/markdown/diagrams.lua"
+  local math_filter = config .. "/assets/markdown/math.lua"
   local css = css_for_template(config, options.template)
   local input_dir = vim.fn.fnamemodify(input, ":h")
   local output_dir = vim.fn.fnamemodify(output, ":h")
@@ -108,7 +109,7 @@ local function pandoc_html_command(input, output, options)
     "pandoc",
     vim.fn.shellescape(input),
     "--standalone",
-    "--from markdown+mark",
+    "--from markdown+mark+tex_math_single_backslash",
     "--to html5",
     "--mathml",
     "--embed-resources",
@@ -116,6 +117,7 @@ local function pandoc_html_command(input, output, options)
     "--lua-filter " .. vim.fn.shellescape(pagetitle_filter),
     "--lua-filter " .. vim.fn.shellescape(callout_filter),
     "--lua-filter " .. vim.fn.shellescape(diagrams_filter),
+    options.pdf and ("--lua-filter " .. vim.fn.shellescape(math_filter)) or "",
     "--css " .. vim.fn.shellescape(css),
     "--output " .. vim.fn.shellescape(output),
   }, " ")
@@ -167,7 +169,7 @@ local function export_html(options)
 end
 
 local function export_pdf(options)
-  options = options or {}
+  options = vim.tbl_extend("force", options or {}, { pdf = true })
 
   local input = current_file()
   if not input then
