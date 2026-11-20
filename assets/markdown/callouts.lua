@@ -15,6 +15,23 @@ local callout_titles = {
   quote = "Quote",
 }
 
+local callout_symbols = {
+  note = "✎",
+  tip = "◇",
+  important = "!",
+  warning = "⚠︎",
+  caution = "⚠︎",
+  error = "×",
+  danger = "☠︎",
+  failure = "×",
+  fail = "×",
+  missing = "⊖",
+  bug = "※",
+  info = "ℹ︎",
+  question = "?",
+  quote = "❝",
+}
+
 local function normalize_type(value)
   return value:lower():gsub("[^%w_-]", "")
 end
@@ -108,6 +125,9 @@ function BlockQuote(block)
     table.insert(content, 1, pandoc.Para(body_inlines))
   end
   table.insert(content, 1, pandoc.Para({
+    pandoc.Span({ pandoc.Str(callout_symbols[callout_type]) },
+      pandoc.Attr("", { "callout-symbol" }, { ["aria-hidden"] = "true" })),
+    pandoc.Space(),
     pandoc.Str(title),
   }))
 

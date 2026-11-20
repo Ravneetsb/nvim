@@ -16,6 +16,14 @@ body {
   padding: 0 0.75rem;
 }
 
+@media screen {
+  body {
+    margin: 4px;
+    max-width: none;
+    padding: 0;
+  }
+}
+
 pre,
 code {
   font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font Mono", "Hack Nerd Font Mono", ui-monospace, monospace;
@@ -116,6 +124,10 @@ blockquote > :last-child {
 }
 
 .callout {
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   background: var(--callout-bg);
   border: 1px solid color-mix(in srgb, var(--callout-border), white 62%);
   border-left: 0.35rem solid var(--callout-border);
@@ -170,10 +182,14 @@ blockquote > :last-child {
 .callout-danger,
 .callout-failure,
 .callout-fail,
-.callout-missing,
 .callout-bug {
   --callout-border: #dc2626;
   --callout-bg: #fef2f2;
+}
+
+.callout-missing {
+  --callout-border: #c2410c;
+  --callout-bg: #fff7ed;
 }
 
 .callout-question {

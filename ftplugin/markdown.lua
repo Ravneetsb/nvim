@@ -109,7 +109,7 @@ local function pandoc_html_command(input, output, options)
     "pandoc",
     vim.fn.shellescape(input),
     "--standalone",
-    "--from markdown+mark+tex_math_single_backslash",
+    "--from markdown+mark+tex_math_single_backslash+lists_without_preceding_blankline",
     "--to html5",
     "--mathml",
     "--embed-resources",
